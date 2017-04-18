@@ -4,12 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
-import android.support.v7.view.menu.MenuItemImpl;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -47,25 +45,34 @@ public class ReminderRecyclerAdapter extends RecyclerView.Adapter<ReminderRecycl
     public void onBindViewHolder(final ViewHolder holder, int position) {
         final Reminder reminder = this.todoList.get(position);
 
+        // Sets reminders view according to the reminder description and date
         holder.tvReminderDescription.setText(reminder.getDescription());
         holder.tvReminderDescription.setTextColor(position%2==0 ? Color.RED : Color.BLUE);
-        holder.tvReminderDate.setText(reminder.getDay() + "/" + reminder.getMonth() + "/" + reminder.getYear());
+        holder.tvReminderDate.setText(reminder.getDay() + "/" + (reminder.getMonth() + 1) + "/" + reminder.getYear());
 
+        // Open popup menu when list item is clicked
         holder.cvReminder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final PopupMenu popupMenu = new PopupMenu(context, v);
                 popupMenu.getMenuInflater().inflate(R.menu.popup_menu, popupMenu.getMenu());
-                String itemText = holder.tvReminderDescription.getText().toString();
-                final String number = itemText.length() > "call ".length() ? itemText.substring(5).trim() : "";
 
-                if (itemText.toLowerCase().startsWith("call") && number.length() > 0
+                // Strings for handling Call reminders
+                String itemText = holder.tvReminderDescription.getText().toString();
+                String call = context.getString(R.string.popup_menu_call_space);
+                final String number = itemText.length() > call.length() ? itemText.substring(5).trim() : "";
+
+                // Checks if it's a Call reminder and updates menu accordingly
+                if (itemText.toLowerCase().startsWith(call.toLowerCase()) && number.length() > 0
                         && TextUtils.isDigitsOnly(number)) {
                     MenuItem callItem = popupMenu.getMenu().findItem(R.id.pMenuCall);
                     callItem.setVisible(true);
-                    callItem.setTitle("Call " + number);
+                    callItem.setTitle(itemText);
                 }
 
+
+                /* Defines behavior for when user choose an option from the popup menu:
+                   Delete Item, Cancel (do nothing), Call number (for Call reminders)  */
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {

@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.os.PersistableBundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -15,7 +14,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -33,15 +31,11 @@ public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.rvTodoList)
     RecyclerView rvTodoList;
-    // TODO dialog, FAB add button, Task(DatePicker and EditText), Positive\Negative to confirm or cancel reminder
-    // Popup for when reminder is clicked, If reminder is started with call and then number then should start dialer with the
-    // the number to call
-    // TODO alternating text color RED BLUE
     private List<Reminder> reminderList;
     private  ReminderRecyclerAdapter adapter;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
     String reminderDescription;
-    String REMINDERS_KEY= "REMINDERS";
+    private  static String REMINDERS_KEY= "REMINDERS";
 
 
     @Override
@@ -56,11 +50,12 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                // Prepare Dialog to add new reminders
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 View dView = getLayoutInflater().inflate(R.layout.dialog_new_reminder, null);
                 final EditText etDescription = (EditText) dView.findViewById(R.id.etDialogReminderDescription);
 
+                // Positive button adds new reminder and then offers a DatePicker for the reminder
                 builder.setPositiveButton(R.string.dialog_add, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -80,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
                         dateDialog.show();
                     }
                 });
-
+                // Negative button closes the dialog without changing the list
                 builder.setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -110,7 +105,6 @@ public class MainActivity extends AppCompatActivity {
         rvTodoList.setHasFixedSize(true);
         rvTodoList.setLayoutManager(llm);
 
-//        adapter = new ReminderRecyclerAdapter(this.getBaseContext(), reminderList);
         adapter = new ReminderRecyclerAdapter(MainActivity.this, reminderList);
         rvTodoList.setAdapter(adapter);
         mDateSetListener = new DatePickerDialog.OnDateSetListener() {
@@ -162,6 +156,13 @@ public class MainActivity extends AppCompatActivity {
         reminderList.add(new Reminder("Vacation", 2018, 11, 1));
         reminderList.add(new Reminder("Check thing", 2018, 1, 10));
         reminderList.add(new Reminder("Call 05245954", 2018, 1, 10));
+        reminderList.add(new Reminder("Call ", 2018, 1, 10));
+        reminderList.add(new Reminder("Call", 2018, 1, 10));
+        reminderList.add(new Reminder("Call 03432 fds", 2018, 1, 10));
+        reminderList.add(new Reminder("Call93443", 2018, 1, 10));
+        reminderList.add(new Reminder("Callfdas", 2018, 1, 10));
+        reminderList.add(new Reminder("Call daf", 2018, 1, 10));
+
     }
 
 

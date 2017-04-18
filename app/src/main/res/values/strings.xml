@@ -7,4 +7,5 @@
     <string name="popup_cancel">Cancel</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="dialog_add">Add</string>
+    <string name="popup_menu_call_space">"Call "</string>
 </resources>
