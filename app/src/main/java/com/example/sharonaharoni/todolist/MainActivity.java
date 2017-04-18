@@ -15,6 +15,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     // TODO dialog, FAB add button, Task(DatePicker and EditText), Positive\Negative to confirm or cancel reminder
     // Popup for when reminder is clicked, If reminder is started with call and then number then should start dialer with the
     // the number to call
+    // TODO alternating text color RED BLUE
     private List<Reminder> reminderList;
     private  ReminderRecyclerAdapter adapter;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
@@ -95,17 +97,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+        /* Check if there's a saved instance */
         if (savedInstanceState == null || !savedInstanceState.containsKey(REMINDERS_KEY)) {
             initializeData();
         } else {
             reminderList = savedInstanceState.getParcelableArrayList(REMINDERS_KEY);
         }
+
         LinearLayoutManager llm = new LinearLayoutManager(this.getBaseContext());
 
         rvTodoList.setHasFixedSize(true);
         rvTodoList.setLayoutManager(llm);
 
-        adapter = new ReminderRecyclerAdapter(this.getBaseContext(), reminderList);
+//        adapter = new ReminderRecyclerAdapter(this.getBaseContext(), reminderList);
+        adapter = new ReminderRecyclerAdapter(MainActivity.this, reminderList);
         rvTodoList.setAdapter(adapter);
         mDateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -117,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
+
     }
 
     @Override
