@@ -28,7 +28,7 @@ import butterknife.ButterKnife;
 public class ReminderRecyclerAdapter extends RecyclerView.Adapter<ReminderRecyclerAdapter.ViewHolder>{
 
     private List<Reminder> todoList;
-    Context context;
+    private Context context;
 
     public ReminderRecyclerAdapter(Context context, List<Reminder> todoList) {
         this.context = context;
@@ -115,8 +115,6 @@ public class ReminderRecyclerAdapter extends RecyclerView.Adapter<ReminderRecycl
         RelativeLayout rlReminderItem;
         @BindView(R.id.cvReminder)
         CardView cvReminder;
-
-        private Context context;
 
         ViewHolder(View view) {
             super(view);

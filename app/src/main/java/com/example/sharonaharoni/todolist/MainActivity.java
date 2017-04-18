@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
 
         /* Check if there's a saved instance */
         if (savedInstanceState == null || !savedInstanceState.containsKey(REMINDERS_KEY)) {
-            initializeData();
+            this.reminderList = new ArrayList<>();
         } else {
             reminderList = savedInstanceState.getParcelableArrayList(REMINDERS_KEY);
         }
@@ -147,23 +147,4 @@ public class MainActivity extends AppCompatActivity {
         outState.putParcelableArrayList(REMINDERS_KEY, (ArrayList<? extends Parcelable>) reminderList);
         super.onSaveInstanceState(outState);
     }
-
-    private void initializeData() {
-        this.reminderList = new ArrayList<>();
-        reminderList.add(new Reminder("See movie", 2018, 1, 10));
-        reminderList.add(new Reminder("See Friend", 2018, 4, 15));
-        reminderList.add(new Reminder("Homework", 2017, 5, 23));
-        reminderList.add(new Reminder("Vacation", 2018, 11, 1));
-        reminderList.add(new Reminder("Check thing", 2018, 1, 10));
-        reminderList.add(new Reminder("Call 05245954", 2018, 1, 10));
-        reminderList.add(new Reminder("Call ", 2018, 1, 10));
-        reminderList.add(new Reminder("Call", 2018, 1, 10));
-        reminderList.add(new Reminder("Call 03432 fds", 2018, 1, 10));
-        reminderList.add(new Reminder("Call93443", 2018, 1, 10));
-        reminderList.add(new Reminder("Callfdas", 2018, 1, 10));
-        reminderList.add(new Reminder("Call daf", 2018, 1, 10));
-
-    }
-
-
 }
