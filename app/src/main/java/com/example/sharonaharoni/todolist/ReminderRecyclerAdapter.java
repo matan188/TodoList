@@ -1,7 +1,9 @@
 package com.example.sharonaharoni.todolist;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.support.v7.view.menu.MenuItemImpl;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.PopupMenu;
@@ -55,9 +57,10 @@ public class ReminderRecyclerAdapter extends RecyclerView.Adapter<ReminderRecycl
                 final PopupMenu popupMenu = new PopupMenu(context, v);
                 popupMenu.getMenuInflater().inflate(R.menu.popup_menu, popupMenu.getMenu());
                 String itemText = holder.tvReminderDescription.getText().toString();
-                String number = itemText.substring(5).trim();
+                final String number = itemText.length() > "call ".length() ? itemText.substring(5).trim() : "";
 
-                if (itemText.toLowerCase().startsWith("call") && TextUtils.isDigitsOnly(number)) {
+                if (itemText.toLowerCase().startsWith("call") && number.length() > 0
+                        && TextUtils.isDigitsOnly(number)) {
                     MenuItem callItem = popupMenu.getMenu().findItem(R.id.pMenuCall);
                     callItem.setVisible(true);
                     callItem.setTitle("Call " + number);
@@ -71,11 +74,15 @@ public class ReminderRecyclerAdapter extends RecyclerView.Adapter<ReminderRecycl
                                 int positionRemoved = todoList.indexOf(reminder);
                                 todoList.remove(positionRemoved);
                                 notifyDataSetChanged();
+                                break;
                             case R.id.pMenuCancel:
                                 popupMenu.dismiss();
+                                break;
                             case R.id.pMenuCall:
-                                popupMenu.dismiss();
-
+                                Intent intent = new Intent(Intent.ACTION_DIAL);
+                                intent.setData(Uri.parse("tel:" + number));
+                                context.startActivity(intent);
+                                break;
                         }
                         return true;
                     }
