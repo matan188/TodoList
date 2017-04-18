@@ -1,12 +1,12 @@
 package com.example.sharonaharoni.todolist;
 
-import android.support.design.widget.Snackbar;
-
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.EditText;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -34,11 +35,13 @@ public class MainActivity extends AppCompatActivity {
     private List<Reminder> reminderList;
     private  ReminderRecyclerAdapter adapter;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
+    String reminderDescription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -46,21 +49,47 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Calendar cal = Calendar.getInstance();
-                int year = cal.get(Calendar.YEAR);
-                int month = cal.get(Calendar.MONTH);
-                int day = cal.get(Calendar.DAY_OF_MONTH);
 
-                DatePickerDialog dialog = new DatePickerDialog(
-                        MainActivity.this,
-                        android.R.style.Theme_Holo_Light_Dialog,
-                        mDateSetListener,
-                        year, month, day);
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                View dView = getLayoutInflater().inflate(R.layout.dialog_new_reminder, null);
+                final EditText etDescription = (EditText) dView.findViewById(R.id.etDialogReminderDescription);
 
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dialog.show();
+                builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        reminderDescription = etDescription.getText().toString();
+                        Calendar cal = Calendar.getInstance();
+                        int year = cal.get(Calendar.YEAR);
+                        int month = cal.get(Calendar.MONTH);
+                        int day = cal.get(Calendar.DAY_OF_MONTH);
+
+                        DatePickerDialog dateDialog = new DatePickerDialog(
+                                MainActivity.this,
+                                android.R.style.Theme_Holo_Light_Dialog,
+                                mDateSetListener,
+                                year, month, day);
+
+                        dateDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        dateDialog.show();
+                    }
+                });
+
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                builder.setView(dView);
+                AlertDialog descriptionDialog = builder.create();
+                descriptionDialog.show();
+
+
+
             }
         });
+
 
         initializeData();
         LinearLayoutManager llm = new LinearLayoutManager(this.getBaseContext());
@@ -74,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 if (view.isShown()){
-                    Reminder reminder = new Reminder("Empty for now", year, month, dayOfMonth);
+                    Reminder reminder = new Reminder(reminderDescription, year, month, dayOfMonth);
                     reminderList.add(reminder);
                     adapter.notifyItemInserted(reminderList.size()-1);
                 }
