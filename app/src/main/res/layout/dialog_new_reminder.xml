@@ -11,15 +11,15 @@
         android:layout_gravity="center"
         android:textSize="25sp"
         android:textStyle="bold"
-        android:layout_marginTop="5dp"
-        android:text="TextView" />
+        android:layout_marginTop="@dimen/small_margin"
+        android:text="@string/dialog_add_reminder" />
 
     <EditText
         android:id="@+id/etDialogReminderDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="@dimen/medium_margin"
         android:inputType="textPersonName"
-        android:hint="Enter reminder"/>
+        android:hint="@string/dialog_reminder_hint"/>
 </LinearLayout>

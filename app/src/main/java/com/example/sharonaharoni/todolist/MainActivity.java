@@ -5,6 +5,8 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.os.PersistableBundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -24,6 +26,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+
 public class MainActivity extends AppCompatActivity {
 
 
@@ -36,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
     private  ReminderRecyclerAdapter adapter;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
     String reminderDescription;
+    String REMINDERS_KEY= "REMINDERS";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,8 +95,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-        initializeData();
+        if (savedInstanceState == null || !savedInstanceState.containsKey(REMINDERS_KEY)) {
+            initializeData();
+        } else {
+            reminderList = savedInstanceState.getParcelableArrayList(REMINDERS_KEY);
+        }
         LinearLayoutManager llm = new LinearLayoutManager(this.getBaseContext());
 
         rvTodoList.setHasFixedSize(true);
@@ -131,6 +139,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList("REMINDERS", (ArrayList<? extends Parcelable>) reminderList);
+        super.onSaveInstanceState(outState);
     }
 
     private void initializeData() {

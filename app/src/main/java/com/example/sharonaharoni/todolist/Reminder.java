@@ -1,12 +1,15 @@
 package com.example.sharonaharoni.todolist;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
 
 /**
  * Created by sharonaharoni on 18/04/2017.
  */
 
-public class Reminder implements Serializable {
+public class Reminder implements Parcelable {
 
     private String description;
     private int year;
@@ -18,6 +21,13 @@ public class Reminder implements Serializable {
         this.year = year;
         this.month = month;
         this.day = day;
+    }
+
+    Reminder(Parcel in) {
+        description = in.readString();
+        year = in.readInt();
+        month = in.readInt();
+        day = in.readInt();
     }
 
     public String getDescription() {
@@ -52,4 +62,26 @@ public class Reminder implements Serializable {
         this.month = month;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(description);
+        dest.writeInt(year);
+        dest.writeInt(month);
+        dest.writeInt(day);
+    }
+
+    public static final Parcelable.Creator<Reminder> CREATOR = new Parcelable.Creator<Reminder>() {
+        public Reminder createFromParcel(Parcel in) {
+            return new Reminder(in);
+        }
+
+        public Reminder[] newArray(int size) {
+            return new Reminder[size];
+        }
+    };
 }
