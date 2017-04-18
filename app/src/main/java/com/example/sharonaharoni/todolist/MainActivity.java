@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
                 View dView = getLayoutInflater().inflate(R.layout.dialog_new_reminder, null);
                 final EditText etDescription = (EditText) dView.findViewById(R.id.etDialogReminderDescription);
 
-                builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                builder.setPositiveButton(R.string.dialog_add, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         reminderDescription = etDescription.getText().toString();
@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                builder.setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putParcelableArrayList("REMINDERS", (ArrayList<? extends Parcelable>) reminderList);
+        outState.putParcelableArrayList(REMINDERS_KEY, (ArrayList<? extends Parcelable>) reminderList);
         super.onSaveInstanceState(outState);
     }
 
@@ -161,5 +161,8 @@ public class MainActivity extends AppCompatActivity {
         reminderList.add(new Reminder("Homework", 2017, 5, 23));
         reminderList.add(new Reminder("Vacation", 2018, 11, 1));
         reminderList.add(new Reminder("Check thing", 2018, 1, 10));
+        reminderList.add(new Reminder("Call 05245954", 2018, 1, 10));
     }
+
+
 }
