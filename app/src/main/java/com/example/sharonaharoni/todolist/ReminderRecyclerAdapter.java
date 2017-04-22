@@ -27,12 +27,14 @@ import butterknife.ButterKnife;
 
 public class ReminderRecyclerAdapter extends RecyclerView.Adapter<ReminderRecyclerAdapter.ViewHolder>{
 
+    private DBHelper db;
     private List<Reminder> todoList;
     private Context context;
 
-    public ReminderRecyclerAdapter(Context context, List<Reminder> todoList) {
+    public ReminderRecyclerAdapter(Context context, List<Reminder> todoList, DBHelper db) {
         this.context = context;
         this.todoList = todoList;
+        this.db = db;
     }
 
     @Override
@@ -48,7 +50,7 @@ public class ReminderRecyclerAdapter extends RecyclerView.Adapter<ReminderRecycl
         // Sets reminders view according to the reminder description and date
         holder.tvReminderDescription.setText(reminder.getDescription());
         holder.tvReminderDescription.setTextColor(position%2==0 ? Color.RED : Color.BLUE);
-        holder.tvReminderDate.setText(reminder.getDay() + "/" + (reminder.getMonth() + 1) + "/" + reminder.getYear());
+        holder.tvReminderDate.setText(reminder.getDay() + "/" + (reminder.getMonth()) + "/" + reminder.getYear());
 
         // Open popup menu when list item is clicked
         holder.cvReminder.setOnClickListener(new View.OnClickListener() {
@@ -80,6 +82,7 @@ public class ReminderRecyclerAdapter extends RecyclerView.Adapter<ReminderRecycl
                             case R.id.pMenuDelete:
                                 int positionRemoved = todoList.indexOf(reminder);
                                 todoList.remove(positionRemoved);
+                                db.deleteReminder(reminder);
                                 notifyDataSetChanged();
                                 break;
                             case R.id.pMenuCancel:

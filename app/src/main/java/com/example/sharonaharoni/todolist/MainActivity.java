@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private DatePickerDialog.OnDateSetListener mDateSetListener;
     String reminderDescription;
     private  static String REMINDERS_KEY= "REMINDERS";
+    private DBHelper db = new DBHelper(this);
 
 
     @Override
@@ -86,33 +87,33 @@ public class MainActivity extends AppCompatActivity {
                 builder.setView(dView);
                 AlertDialog descriptionDialog = builder.create();
                 descriptionDialog.show();
-
-
-
             }
         });
 
 
         /* Check if there's a saved instance */
         if (savedInstanceState == null || !savedInstanceState.containsKey(REMINDERS_KEY)) {
-            this.reminderList = new ArrayList<>();
+            reminderList = db.allRemindrs();
         } else {
             reminderList = savedInstanceState.getParcelableArrayList(REMINDERS_KEY);
         }
+
+
 
         LinearLayoutManager llm = new LinearLayoutManager(this.getBaseContext());
 
         rvTodoList.setHasFixedSize(true);
         rvTodoList.setLayoutManager(llm);
 
-        adapter = new ReminderRecyclerAdapter(MainActivity.this, reminderList);
+        adapter = new ReminderRecyclerAdapter(MainActivity.this, reminderList, db);
         rvTodoList.setAdapter(adapter);
         mDateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 if (view.isShown()){
-                    Reminder reminder = new Reminder(reminderDescription, year, month, dayOfMonth);
+                    Reminder reminder = new Reminder(reminderDescription, year, month+1, dayOfMonth);
                     reminderList.add(reminder);
+                    db.insertReminder(reminder);
                     adapter.notifyItemInserted(reminderList.size()-1);
                 }
             }

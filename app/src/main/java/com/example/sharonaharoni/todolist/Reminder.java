@@ -27,6 +27,10 @@ public class Reminder implements Parcelable {
         this.day = day;
     }
 
+    public String getDate() {
+        return this.day + "/" + this.month + "/" + this.year;
+    }
+
     Reminder(Parcel in) {
         description = in.readString();
         year = in.readInt();
