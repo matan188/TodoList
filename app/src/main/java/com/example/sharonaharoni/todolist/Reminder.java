@@ -11,12 +11,16 @@ import java.io.Serializable;
 
 public class Reminder implements Parcelable {
 
+    private static int idCounter = 0;
+    private int id;
     private String description;
     private int year;
     private int month;
     private int day;
 
     Reminder(String description, int year, int month, int day) {
+        idCounter++;
+        this.id = idCounter;
         this.description = description;
         this.year = year;
         this.month = month;
@@ -84,4 +88,12 @@ public class Reminder implements Parcelable {
             return new Reminder[size];
         }
     };
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }
