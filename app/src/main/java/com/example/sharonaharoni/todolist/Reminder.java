@@ -70,6 +70,14 @@ public class Reminder implements Parcelable {
         this.month = month;
     }
 
+    static public void updateIdCounter(int id) {
+        idCounter = id;
+    }
+
+    static public int getIdCounter() {
+        return idCounter;
+    }
+
     @Override
     public int describeContents() {
         return 0;

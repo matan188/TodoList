@@ -59,6 +59,7 @@ public class DBHelper extends SQLiteOpenHelper {
             int day = Integer.parseInt(cursor.getString(2));
             int month= Integer.parseInt(cursor.getString(3));
             int year = Integer.parseInt(cursor.getString(4));
+            Reminder.updateIdCounter(Math.max(Integer.parseInt(cursor.getString(0)),Reminder.getIdCounter()));
             allReminders.add(new Reminder(desc, year, month, day));
         }
         return allReminders ;
